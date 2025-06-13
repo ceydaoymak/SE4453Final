@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+env:
+  IMAGE_NAME: finalapp:latest
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -20,7 +23,7 @@ jobs:
 
       - name: Docker build
         run: |
-          docker build -t ${{ secrets.REGISTRY_URL }}/finalapp:latest .
+          docker build -t ${{ secrets.REGISTRY_URL }}/${{ env.IMAGE_NAME }} .
 
       - name: Docker login to ACR
         run: |
@@ -28,10 +31,10 @@ jobs:
 
       - name: Docker push to ACR
         run: |
-          docker push ${{ secrets.REGISTRY_URL }}/finalapp:latest
+          docker push ${{ secrets.REGISTRY_URL }}/${{ env.IMAGE_NAME }}
 
       - name: Deploy to Azure App Service using Managed Identity
         uses: azure/webapps-deploy@v2
         with:
           app-name: se4453final-app
-          images: ${{ secrets.REGISTRY_URL }}/finalapp:latest
+          images: ${{ secrets.REGISTRY_URL }}/${{ env.IMAGE_NAME }}
