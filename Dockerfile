@@ -9,13 +9,12 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
 
-RUN sed -i 's/\r$//' start.sh
-RUN chmod +x start.sh
+
+COPY app.py .
 
 EXPOSE 22 8000
 
 ENV PORT=8000
 
-CMD ["bash", "-c", "./start.sh"]
+CMD ["bash", "-c", "service ssh start && exec gunicorn --bind 0.0.0.0:$PORT --timeout 600 --access-logfile - --error-logfile - app:app"]
