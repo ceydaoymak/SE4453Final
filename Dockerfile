@@ -11,6 +11,6 @@ COPY . .
 
 RUN mkdir /var/run/sshd
 
-EXPOSE 3000 22
+EXPOSE 8000 22
 
-CMD ["bash", "start.sh"]
+CMD ["gunicorn", "-b", "0.0.0.0:8000", "app:app"]
