@@ -5,15 +5,12 @@ on:
     branches:
       - main
 
-env:
-  REGISTRY_URL: ceydaacrfinal.azurecr.io
-
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Azure Login
@@ -23,19 +20,18 @@ jobs:
 
       - name: Docker build
         run: |
-          docker build -t ${{ env.REGISTRY_URL }}/finalapp:latest .
+          docker build -t ${{ secrets.REGISTRY_URL }}/finalapp:latest .
 
       - name: Docker login to ACR
         run: |
-          echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login ${{ env.REGISTRY_URL }} -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
+          echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login ${{ secrets.REGISTRY_URL }} -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
 
-      - name: Push to ACR
+      - name: Docker push to ACR
         run: |
-          docker push ${{ env.REGISTRY_URL }}/finalapp:latest
+          docker push ${{ secrets.REGISTRY_URL }}/finalapp:latest
 
-      - name: Deploy to App Service
+      - name: Deploy to Azure App Service using Managed Identity
         uses: azure/webapps-deploy@v2
         with:
           app-name: se4453final-app
-          images: ${{ env.REGISTRY_URL }}/finalapp:latest
-          enable-managed-identity: true
+          images: ${{ secrets.REGISTRY_URL }}/finalapp:latest
