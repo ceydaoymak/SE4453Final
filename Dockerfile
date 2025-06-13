@@ -17,4 +17,4 @@ EXPOSE 22 8000
 
 ENV PORT=8000
 
-CMD ["bash", "-c", "service ssh start && exec gunicorn --bind 0.0.0.0:$PORT --timeout 600 --access-logfile - --error-logfile - app:app"]
+CMD ["bash", "-c", "service ssh start && python3 app.py"]
