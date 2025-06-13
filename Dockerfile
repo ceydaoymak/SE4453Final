@@ -1,6 +1,6 @@
 FROM python:3.11
 
-RUN apt update && apt install -y openssh-server
+RUN apt update && apt install -y openssh-server && mkdir /var/run/sshd
 
 RUN mkdir /var/run/sshd
 
@@ -16,4 +16,3 @@ RUN chmod +x start.sh
 EXPOSE 22 8000
 
 CMD ["./start.sh"]
-
