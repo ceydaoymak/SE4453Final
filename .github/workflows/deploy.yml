@@ -23,18 +23,18 @@ jobs:
 
       - name: Docker build
         run: |
-          docker build -t $REGISTRY_URL/finalapp:latest .
+          docker build -t ${{ env.REGISTRY_URL }}/finalapp:latest .
 
       - name: Docker login to ACR
         run: |
-          echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login $REGISTRY_URL -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
+          echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login ${{ env.REGISTRY_URL }} -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
 
       - name: Push to ACR
         run: |
-          docker push $REGISTRY_URL/finalapp:latest
+          docker push ${{ env.REGISTRY_URL }}/finalapp:latest
 
       - name: Deploy to App Service
         uses: azure/webapps-deploy@v2
         with:
           app-name: se4453final-app
-          images: $REGISTRY_URL/finalapp:latest
+          images: ${{ env.REGISTRY_URL }}/finalapp:latest
