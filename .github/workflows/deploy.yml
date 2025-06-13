@@ -38,3 +38,4 @@ jobs:
         with:
           app-name: se4453final-app
           images: ${{ env.REGISTRY_URL }}/finalapp:latest
+          enable-managed-identity: true
