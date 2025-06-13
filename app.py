@@ -32,9 +32,9 @@ def index():
         version = cur.fetchone()[0]
         cur.close()
         conn.close()
-        return f"✅ Bağlantı başarılı. PostgreSQL sürümü: {version}"
+        return f"✅ CONNECTED. PostgreSQL VERSION: {version}"
     except Exception as e:
-        return f"❌ HATA: {str(e)}"
+        return f"❌ ERROR: {str(e)}"
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=3000)
