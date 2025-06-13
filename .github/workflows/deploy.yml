@@ -5,33 +5,36 @@ on:
     branches:
       - main
 
+env:
+  REGISTRY_URL: ceydaacrfinal.azurecr.io
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: 🔐 Azure Login
+      - name: Azure Login
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: 🐳 Docker build
+      - name: Docker build
         run: |
-          docker build -t ${{ secrets.REGISTRY_URL }}/finalapp:latest .
+          docker build -t $REGISTRY_URL/finalapp:latest .
 
-      - name: 🔑 Docker login to ACR
+      - name: Docker login to ACR
         run: |
-          echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login ${{ secrets.REGISTRY_URL }} -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
+          echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login $REGISTRY_URL -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
 
-      - name: 📤 Push to ACR
+      - name: Push to ACR
         run: |
-          docker push ${{ secrets.REGISTRY_URL }}/finalapp:latest
+          docker push $REGISTRY_URL/finalapp:latest
 
-      - name: 🚀 Deploy to App Service
+      - name: Deploy to App Service
         uses: azure/webapps-deploy@v2
         with:
           app-name: se4453final-app
-          images: ${{ secrets.REGISTRY_URL }}/finalapp:latest
+          images: $REGISTRY_URL/finalapp:latest
