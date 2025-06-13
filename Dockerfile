@@ -11,6 +11,8 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
+RUN chmod +x start.sh
+
 EXPOSE 22 8000
 
-CMD service ssh start && gunicorn -b 0.0.0.0:8000 app:app
+CMD ["./start.sh"]
